@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: sample-springdata-service
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/pm490
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      ddl-auto: update
+      # ddl-auto=none:
+      # properties:
+      #  hibernate:
+      #    dialect: org.hibernate.dialect.MySQL8Dialect
+
+  security:
+    jwt:
+      secret: "temka"
+      expiretime: 86400000
+
+  env:
+    abc:
+      email: "fivelayers@gmail.com"
+    tax: 7
+  cron:
+    duration: 250000000
+  debug: true
