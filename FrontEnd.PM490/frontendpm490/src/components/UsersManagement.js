@@ -200,7 +200,6 @@ class UsersManagement extends Component {
                                         value={role}>
                                     <option value="CUSTOMER">Customer</option>
                                     <option value="VENDOR">Vendor</option>
-                                    <option value="CLIENT">Client</option>
                                 </select>
                             </div>
 

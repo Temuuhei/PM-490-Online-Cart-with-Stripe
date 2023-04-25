@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/payment")
-@PreAuthorize("hasAuthority('CUSTOMER') or hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('CUSTOMER') or hasAuthority('ADMIN') or hasAuthority('CLIENT') ")
 public class PaymentController {
 
     @Autowired

@@ -11,6 +11,7 @@ const initState = {
   email: "",
   role: "",
   address: "",
+  vendorInitialPayment : 0.0,
   flash: null,
 };
 
@@ -36,6 +37,7 @@ class SignUp extends Component {
       email,
       role,
       address,
+      vendorInitialPayment,
     } = this.state;
 
     if (!username || !password || !fullname || !phone || !email || !role) {
@@ -53,12 +55,14 @@ class SignUp extends Component {
 
       if (response.status === 200) {
         this.setState(initState);
+        alert("FYI : All Vendor has to pay initial one time payment 20000$ Once you agreed we will charge your card later only one time ")
         this.setState({
           flash: {
             status: "is-success",
             msg: "User registered successfully",
           },
         });
+        this.props.history.push('/login');
         
     //    Send email to admin about new user is registered but below fucked up
 
@@ -96,7 +100,7 @@ class SignUp extends Component {
   };
 
   render() {
-    const { username, password, fullname, phone, email, role, address } =
+    const { username, password, fullname, phone, email, role, address, vendorInitialPayment } =
       this.state;
 
     return (
@@ -181,9 +185,30 @@ class SignUp extends Component {
                                         value={role}>
                                     <option value="CUSTOMER">Customer</option>
                                     <option value="VENDOR">Vendor</option>
-                                    <option value="CLIENT">Client</option>
                                 </select>
                             </div>
+                            {role === "VENDOR" && (
+                            <div className="field">
+                              <label className="label">Initial payment: </label>
+                              <input
+                                className="input"
+                                type="number"
+                                name="vendorInitialPayment"
+                                value={vendorInitialPayment}
+                                onChange={this.handleChange}
+                              />
+                              <label>
+                            <input
+                              type="checkbox"
+                              name="agreement"
+                              checked={this.state.agreement}
+                              onChange={this.handleChange}
+                              required
+                            />
+                            <span>  </span>I agree to pay the initial payment.
+                          </label>
+                            </div>
+                          )}
 
                             {this.state.flash && (
                                 <div className={`notification ${this.state.flash.status}`}>

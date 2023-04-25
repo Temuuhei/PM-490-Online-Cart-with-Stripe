@@ -21,10 +21,11 @@ public class Transaction {
     private double amount;
     private LocalDate dateShipped;
 
-    public Transaction(PaymentMethod paymentMethod, String concept, double amount, LocalDate dateShipped) {
+    public Transaction(PaymentMethod paymentMethod, String concept, double amount, LocalDate dateShipped, User user) {
         this.paymentMethod = paymentMethod;
         this.concept = concept;
         this.amount = amount;
         this.dateShipped = dateShipped;
+        this.user = user;
     }
 }

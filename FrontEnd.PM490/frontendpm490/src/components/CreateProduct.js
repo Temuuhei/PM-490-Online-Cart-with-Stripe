@@ -39,15 +39,15 @@ class CreateProduct extends Component {
         if (name && price) {
             //const id = Math.random().toString(36).substring(2) + Date.now().toString(36);
             const { user } = this.props.context;
-            await axios.post(
+            const res = await axios.post(
                 'http://localhost:8080/api/product/saveproduct',
                 { name, color, idVendor: user.id, status: "APPROVED",quantity, idCategory, price },
                 {headers: {'Content-Type': 'application/json',
                         'Authorization': 'Bearer '+ user.token}
             },
 
-        )
-
+            )
+            console.log("res.data : ", res.data);
             this.props.context.createProduct(
                 {
                     name,
@@ -59,6 +59,7 @@ class CreateProduct extends Component {
                     price
                 },
                 () => {
+                    console.log("res.data : ", res.data);
                     this.setState(initState);
                     this.props.history.push('/products');
                 }

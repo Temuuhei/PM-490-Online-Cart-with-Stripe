@@ -1,15 +1,13 @@
 package com.pm490.PM490.repository;
 
-import com.pm490.PM490.model.Category;
-import com.pm490.PM490.model.Product;
-import com.pm490.PM490.model.ProductStatus;
-import com.pm490.PM490.model.User;
+import com.pm490.PM490.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -58,4 +56,14 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     @Query("select distinct color from Product")
     List<String> getColors();
+
+
+    @Query(value = "select u.username as username,sum(price*quantity) as sale_amount from user u inner join product p  on u.id=p.vendor_id where lower(u.role)='vendor' group by u.username", nativeQuery = true)
+    List<Object[]> findAllProductByVendor();
+
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<Product> searchProductAdvancedproducts(@Param("query") String query);
+
+
 }

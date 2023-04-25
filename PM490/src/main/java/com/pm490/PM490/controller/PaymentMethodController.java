@@ -17,7 +17,6 @@ import java.util.List;
 @PreAuthorize("hasAnyAuthority('CUSTOMER', 'VENDOR')")
 public class PaymentMethodController {
     @Autowired
-
     PaymentMethodRepository paymentMethodRepository;
     @Autowired
     UserRepository userRepository;

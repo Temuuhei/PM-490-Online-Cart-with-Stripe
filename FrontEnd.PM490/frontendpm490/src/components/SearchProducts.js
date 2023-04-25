@@ -35,14 +35,31 @@ class Search extends Component {
 
     handleChange = e => this.setState({[e.target.name]: e.target.value, error: ""});
 
-    search = (e) => {
+    search = async (e) => {
+        const {user} = this.props.context;
         e.preventDefault();
         let {name, status, color, idVendor, idCategory} = this.state;
         if (status === ""){ status= "APPROVED"};
         if (name) {
-            this.props.context.search(name, status, color, idVendor, idCategory)
+            // this.props.context.search(name, status, color, idVendor, idCategory)
+            const url = `http://localhost:8080/api/product/searchproduct/${name}`;
+            await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                  },
+                params: {
+                    status: status,
+                    color: color,
+                    idVendor: idVendor,
+                    idCategory: idCategory
+                }
+            }).then(res => {
+                this.props.context.setProducts(res.data);
+              }).catch(err => {
+                console.log(err);
+              });
         } else {
-            window.location.replace("/");
+            window.location.replace("/products");
         }
     };
 

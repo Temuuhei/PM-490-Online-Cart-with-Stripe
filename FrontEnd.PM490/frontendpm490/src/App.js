@@ -138,6 +138,10 @@ export default class App extends Component {
 
     }
 
+    setProducts = (products) => {
+        this.setState({ products });
+      };
+
     createProduct = (product, callback) => {
          /*
         let products = this.state.products.slice();
@@ -164,7 +168,8 @@ export default class App extends Component {
                     createProduct: this.createProduct,
                     clearCart: this.clearCart,
                     checkout: this.checkout,
-                    search: this.search
+                    search: this.search,
+                    setProducts : this.setProducts,
                 }}
             >
                 <Router ref={this.routerRef}>
@@ -173,8 +178,9 @@ export default class App extends Component {
                             className="navbar container"
                             role="navigation"
                             aria-label="main navigation"
-                        >
-                            <div className="navbar-brand">
+                        > 
+                        <Link to="/products" >
+                        <div className="navbar-brand">
                                 <b className="navbar-item is-size-4 ">Five Layers Store</b>
                                 <label
                                     role="button"
@@ -192,6 +198,8 @@ export default class App extends Component {
                                     <span aria-hidden="true"></span>
                                 </label>
                             </div>
+                        </Link>
+                            
                             <div className={`navbar-menu ${
                                 this.state.showMenu ? "is-active" : ""
                             }`}>
@@ -203,15 +211,20 @@ export default class App extends Component {
                                         Create Product
                                     </Link>
                                 )}
-                                <Link to="/ShoppingCart" className="navbar-item">
-                                    ShoppingCart
-                                    <span
+                                    <Link to="/ShoppingCart" className="navbar-item">
+                                        ShoppingCart
+                                        <span
                                         className="tag is-primary"
                                         style={{marginLeft: "5px"}}
                                     >
                                         {Object.keys(this.state.cart).length}
-                                    </span>
-                                </Link>
+                                        </span>
+                                    </Link>
+                                {this.state.user && this.state.user.role !== "ADMIN" && (
+                                    <Link to="/PaymentMethod" className="navbar-item">
+                                        Payment Method
+                                    </Link>
+                                )}
                                 {this.state.user && this.state.user.role === "ADMIN" && (
                                     <Link to="/UserManagement" className="navbar-item">
                                         User Management
@@ -240,7 +253,7 @@ export default class App extends Component {
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/UserManagement" component={UsersManagement} />
                             <Route exact path="/signup" component={SignUp}/>
-                            <Route exact path="/products" component={ProductList} />
+                            <Route exact path="/products" component={ProductList}  />
                             <Route exact path="/ShoppingCart" component={ShoppingCart}/>
                             <Route exact path="/PaymentMethod" component={PaymentMethod}/>
                             <Route exact path="/finance" component={Finance}/>

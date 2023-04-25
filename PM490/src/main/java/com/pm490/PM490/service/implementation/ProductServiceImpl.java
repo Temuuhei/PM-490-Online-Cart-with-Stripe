@@ -7,14 +7,18 @@ import com.pm490.PM490.repository.CategoryRepository;
 import com.pm490.PM490.repository.ProductRepository;
 import com.pm490.PM490.repository.UserRepository;
 import com.pm490.PM490.service.ProductService;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 @Service
 @Transactional
@@ -155,6 +159,42 @@ public class ProductServiceImpl implements ProductService {
             return !productRepository.existsById(id);
         } else {
             return false;
+        }
+    }
+
+    public String exportReport(String reportFormat) throws FileNotFoundException, JRException {
+        String path = "/Users/temuujintsogt/Downloads/Report/";
+        List<Object[]> productReports = productRepository.findAllProductByVendor();
+        List<ProductReport> finalReports = new ArrayList<ProductReport>();
+
+        for (Object[] obj : productReports) {
+            String userName = (String) obj[0];
+            double totalSales = (Double) obj[1];
+            ProductReport summary = new ProductReport( userName, totalSales);
+            finalReports.add(summary);
+        }
+        //load file and compile it
+        File file = ResourceUtils.getFile("classpath:vendorsalesreports.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(finalReports);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("createdBy", "Binod Kathayat");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        if (reportFormat.equalsIgnoreCase("html")) {
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "vendor_sales_report.html");
+        }
+        if (reportFormat.equalsIgnoreCase("pdf")) {
+            JasperExportManager.exportReportToPdfFile(jasperPrint, path + "vendor_sales_report.pdf");
+        }
+        return path;
+    }
+
+    @Override
+    public List<Product> searchProducts(String query) {
+        if (StringUtils.isEmpty(query)) {
+            return productRepository.findAll();
+        } else {
+            return productRepository.searchProductAdvancedproducts(query);
         }
     }
 }

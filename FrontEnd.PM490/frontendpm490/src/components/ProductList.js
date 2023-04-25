@@ -20,20 +20,24 @@ class ProductList extends Component {
           }
         })
         .then(res => {
-          this.setState({ products: res.data });
+          this.props.setProducts(res.data);
         })
         .catch(err => {
           console.log(err);
         });
     }
+
+    updateProducts = (products) => {
+      this.setState({ products });
+    };
   
     render() {
-      const { products } = this.state;
+      const { products } = this.props.context;
       return (
         <>
           <div className="hero is-info">
             <div className="hero-body container">
-              <h4 className="title">Our Products</h4>
+              <h4 className="title">Welcome to Five Layers Store</h4>
             </div>
           </div>
           <br />

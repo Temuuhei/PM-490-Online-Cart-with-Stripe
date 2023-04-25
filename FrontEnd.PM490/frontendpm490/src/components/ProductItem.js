@@ -3,7 +3,7 @@ import React from "react";
 import withContext from "../withContext";
 
 const ProductItem = props => {
-    const { product } = props;
+    const { product, user } = props;
     return (
         <div className=" column is-half">
             <div className="box">
@@ -31,18 +31,18 @@ const ProductItem = props => {
                             <small className="has-text-danger">Out Of Stock</small>
                         )}
                         <div className="is-clearfix">
-                            <button
-                                className="button is-small is-outlined is-primary   is-pulled-right"
-                                onClick={() =>
-                                    props.addToCart({
-                                        id: product.id,
-                                        product,
-                                        amount: 1
-                                    })
-                                }
-                            >
-                                Add to Cart
-                            </button>
+                                <button
+                                    className="button is-small is-outlined is-primary   is-pulled-right"
+                                    onClick={() =>
+                                        props.addToCart({
+                                            id: product.id,
+                                            product,
+                                            amount: 1
+                                        })
+                                    }
+                                >
+                                    Add to Cart
+                                </button>
                         </div>
                     </div>
                 </div>

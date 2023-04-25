@@ -55,9 +55,32 @@ class ShoppingCart extends Component {
           );
       
           if (res.status === 200) {
-            alert("Payment Success");
-            this.props.context.clearCart();
-            this.props.history.push("/ShoppingCart");
+
+            // create transaction
+
+            const transactionRes = await axios.post("http://localhost:8080/api/transaction/create",
+            {
+                paymentMethodId : 31,
+                concept: "Using Stripe checkout with " + user.username,
+                amount: this.state.total,
+                dateShipped : new Date(),
+                idUser : user.id
+            },
+            { headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + user.token,
+              },
+            }
+            )
+            if (transactionRes.status === 200 ) {
+                alert("Payment Success");
+                this.props.context.clearCart();
+                this.props.history.push("/ShoppingCart");
+            }else {
+
+                alert("Transaction creation field !");
+            }
+            
           }
         } catch (error) {
           alert(error.response.data.message);
@@ -113,19 +136,19 @@ class ShoppingCart extends Component {
                                         Clear cart
                                     </button>
                                     {""}
-                                    <button
+                                    {/* <button
                                         className="button is-success"
                                         onClick={this.props.context.checkout}
                                     >
                                         Checkout
-                                    </button>
+                                    </button> */}
                                     <Stripe
                                         stripeKey="" // Replace with your Stripe Publishable key
                                         token={this.handleToken}
                                         amount={this.state.total} // Replace with the actual amount to charge
-                                        name="Payment Methods"
-                                        billingAddress
-                                        zipCode
+                                        // name="Payment Methods"
+                                        // billingAddress
+                                        // zipCode
                                         >
                                         <button className="button is-primary is-rounded is-pulled-right">
                                             Pay with Stripe

@@ -23,22 +23,31 @@ class PaymentMethod extends Component {
         if (type && fullname && number && expireDate && cvv && zipcode) {
 
             const {user} = this.props.context;
-            const res = await axios.post(
-                'http://localhost:8080/api/paymentmethod/create',
-                {type, fullname, number, expireDate, cvv, zipcode},
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + user.token
-                    }
-                },
-            ).catch((res) => {
-                return {status: 401, message : "Credit card declined"}
+            let url = "";
 
-            })
+            if (type === "Visa") {
+                url = "http://localhost:8080/api/paymentmethod/card/visa";
+              } else if (type === "MasterCard") {
+                url = "http://localhost:8080/api/paymentmethod/card/mastercard";
+              }
+
+
+            const res = await axios.post(url,
+                        { type, fullname, number, expireDate, cvv, zipcode },
+                        {
+                            headers: {
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + user.token,
+                            },
+                        }
+                        )
+                        .catch((res) => {
+                        return { status: 401, message: "Credit card declined" };
+                        });
+
 
             if (res.status == 200) {
-                alert('Thanks for shopping :)');
+                alert('Thanks for information :)');
 
                 this.setState({
                     type : '',
@@ -50,7 +59,7 @@ class PaymentMethod extends Component {
 
                 })
                 this.props.context.clearCart();
-                this.props.history.push('/ShoppingCart');
+                this.props.history.push('/products');
             }
 
             this.setState(

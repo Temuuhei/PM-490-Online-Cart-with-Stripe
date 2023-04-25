@@ -15,6 +15,7 @@ import com.pm490.PM490.service.ProductService;
 import com.pm490.PM490.service.implementation.EmailServiceImpl;
 import com.pm490.PM490.util.ListMapper;
 
+import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -178,5 +180,20 @@ public class ProductController {
         email.setAttachFileAddress("./generated-reports/transaction.pdf");
         EmailService emailService = new EmailServiceImpl();
         emailService.sendEmail(email);
+    }
+
+    @GetMapping("/report/{format}")
+    public String generateReport(@PathVariable String format) throws FileNotFoundException, JRException {
+        return productService.exportReport(format);
+    }
+
+    @GetMapping({"/searchproduct/{query}"})
+    public ResponseEntity<List<Product>> searchProducts(@PathVariable String query) {
+        try {
+            List<Product> products = productService.searchProducts(query);
+            return ResponseEntity.ok().body(products);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
