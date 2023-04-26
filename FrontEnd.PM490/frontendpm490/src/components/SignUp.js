@@ -25,7 +25,6 @@ class SignUp extends Component {
   handleChange = (e) =>
     this.setState({ [e.target.name]: e.target.value, error: "" });
 
-   
 
   save = async (e) => {
     e.preventDefault();
@@ -38,6 +37,8 @@ class SignUp extends Component {
       role,
       address,
       vendorInitialPayment,
+      
+
     } = this.state;
 
     if (!username || !password || !fullname || !phone || !email || !role) {
@@ -64,22 +65,6 @@ class SignUp extends Component {
         });
         this.props.history.push('/login');
         
-    //    Send email to admin about new user is registered but below fucked up
-
-        // const mailOptions = {
-        //     from: "your_gmail_username",
-        //     to: "FiveLayersTeam",
-        //     subject: "Test email",
-        //     text: "Hello, this is a test email from your React app!",
-        //   };
-
-        // transporter.sendMail(mailOptions, function (error, info) {
-        // if (error) {
-        //     console.log(error);
-        // } else {
-        //     console.log("Email sent: " + info.response);
-        // }
-        // });
           
       } else {
         this.setState({

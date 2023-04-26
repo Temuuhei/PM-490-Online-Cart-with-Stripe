@@ -27,13 +27,15 @@ public class EmailServiceImpl implements EmailService {
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.username", "***********@gmail.com");
+            props.put("mail.smtp.password", "***********");
             props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
             Session session = Session.getInstance(props, new javax.mail.Authenticator()
             {
                 protected PasswordAuthentication getPasswordAuthentication()
                 {
-                    return new PasswordAuthentication("bolt.iowa@gmail.com", "1qaz@WSX3edc");
+                    return new PasswordAuthentication("temkaecommerce@gmail.com", "EcommerceMP490");
                 }
             });
             Message msg = new MimeMessage(session);
